@@ -38,7 +38,7 @@ const formatTooltip = (countryName, countryCovid) =>{
     unresolved: ${countryCovid.total_unresolved.toLocaleString()}<br>
     deaths: ${countryCovid.total_deaths.toLocaleString()}<br>
     new cases today: ${countryCovid.total_new_cases_today.toLocaleString()}<br>
-    new new deaths today: ${countryCovid.total_new_deaths_today.toLocaleString()}<br>
+    new deaths today: ${countryCovid.total_new_deaths_today.toLocaleString()}<br>
     active cases: ${countryCovid.total_active_cases.toLocaleString()}<br>
     serious cases: ${countryCovid.total_serious_cases.toLocaleString()}`;
   }

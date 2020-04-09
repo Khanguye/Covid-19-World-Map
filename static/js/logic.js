@@ -10,8 +10,16 @@ const flagCountry = "https://www.gstatic.com/onebox/sports/logos/flags/{country}
 //Find the Covid Data of country
 const  findCountryCovid = (feature,covidData) => {
 
+  if (feature.id == "ARE")
+  {
+    feature.id = "UAE";
+  }
+  if (feature.id == "SYR"){
+    feature.id = "Syrian Arab Republic";
+  }
   return covidData.find(item=> {
     if (item.title)
+              
        return  feature.properties.name.toLowerCase().includes(item.title.toLowerCase()) || item.title == feature.id;
     else
       return false;
@@ -22,8 +30,11 @@ const  findCountryCovid = (feature,covidData) => {
 //Find the country flag
 const countrFlag = (countryName) =>
 {
+ 
   let country = (countryName=='USA') || (countryName=='United States of America') ? 'united_states'
-                :countryName.toLowerCase().replace(' ','_');
+                :(countryName=='Democratic Republic of the Congo')?'democratic_republic_congo_brazzaville'
+                :(countryName=='United Republic of Tanzania')?'tanzania'
+                :countryName.toLowerCase().replace(/ /gi,'_');
 
   return flagCountry.replace("{country}",country);
 }
@@ -32,7 +43,7 @@ const countrFlag = (countryName) =>
 const formatTooltip = (countryName, countryCovid) =>{
   
   if (countryCovid){
-    return `<h4><img src="${countrFlag(countryCovid.title)}" width="16"> ${countryName}</h4><hr/>
+    return `<h4><img src="${countrFlag(countryName)}" width="16"> ${countryName}</h4><hr/>
     cases: ${countryCovid.total_cases.toLocaleString()}<br>
     recovered: ${countryCovid.total_recovered.toLocaleString()}<br>
     unresolved: ${countryCovid.total_unresolved.toLocaleString()}<br>
@@ -153,8 +164,9 @@ fetch(covidByCountry).then((response) => response.json()).then( (covidDataObject
   covidData = Object.values(covidDataObject.countryitems[0]).filter(item => item.ourid != 84);
 
   //fetch the geojson map. For performace, we can use a static file.
-  fetch(geoCountry).then((response) => response.json()).then( (countryDataObject) => {
-    //load geojson in the mapp
+  //fetch(geoCountry).then((response) => response.json()).then( (countryDataObject) => {
+  
+    //load geojson object in the map (static object to improve the performance)
     L.geoJson(countryDataObject,{
       style :function(feature){
           //color code for each country based on the total cases    
@@ -179,6 +191,7 @@ fetch(covidByCountry).then((response) => response.json()).then( (covidDataObject
     .setLatLng([0,0])
     .setContent(summaryTop10(covidData))
     .openOn(map);
-  });
+
+  //});
 
 });

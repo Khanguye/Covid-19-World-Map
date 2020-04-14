@@ -194,4 +194,15 @@ fetch(covidByCountry).then((response) => response.json()).then( (covidDataObject
 
   //});
 
+})
+.catch( (error) => {
+
+  L.popup({
+    minWidth: 320,
+    maxWidth: 320
+  })
+  .setLatLng([0,0])
+  .setContent(`<h4>Error Occurred</h4><p>The COVID-19 virus tracker API was down. <a href="https://thevirustracker.com">thevirustracker.com</a></p>`)
+  .openOn(map);
+  
 });

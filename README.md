@@ -9,17 +9,17 @@
 **Summary**
 ---
 
-Create a realtime dashbroad to visualize the Covid-19 data for countries around the world. The dash board help daily to identify the Covid-19 risk. **"Stay Home, Stop The Spread"**
+Create a realtime dashboard to visualize the Covid-19 data for countries around the world. The dashboard helps daily to identify the Covid-19 risk. **"Stay Home, Save Lives"**
 
-**Goals**
+**Features**
 ---
 
-1. Report daily covid-19 data 
-2. Report top 10 country risk 
-3. Risks color code 
-4. Hover Tooltip information
+1. Daily covid-19 data 
+2. Top 10 country risk 
+3. Color code 
+4. Tooltip information
 
-**End Points**
+**APIs**
 
 Open Street Map API
 https://openstreetmap.org
@@ -47,7 +47,7 @@ https://www.gstatic.com/onebox/sports/logos/flags/{country}_icon_square.png
 **Software**
 ---
 
-1. Visual Studion Code
+1. Visual Studio Code
 2. Node.js (run local web application)
 
 **Resources**

@@ -27,8 +27,11 @@ https://openstreetmap.org
 Open Source Leaflet JS
 https://leafletjs.com/
 
-The Virus Tracker API
+The Virus Tracker API (Not Reliable)
 https://api.thevirustracker.com/free-api?countryTotals=ALL
+
+The Virus Tracker API (Backup, but less information)
+https://covid19api.herokuapp.com
 
 Johan Github GeoJson API
 https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json

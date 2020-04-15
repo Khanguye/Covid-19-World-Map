@@ -6,6 +6,9 @@ const geoCountry = "https://raw.githubusercontent.com/johan/world.geo.json/maste
 
 const flagCountry = "https://www.gstatic.com/onebox/sports/logos/flags/{country}_icon_square.png"
 
+//##---just a backup json---##
+const covidByCountry1 =  "https://covid19api.herokuapp.com/confirmed"
+
 //###############################################################//
 //Find the Covid Data of country
 const  findCountryCovid = (feature,covidData) => {
@@ -31,7 +34,7 @@ const  findCountryCovid = (feature,covidData) => {
 const countrFlag = (countryName) =>
 {
  
-  let country = (countryName=='USA') || (countryName=='United States of America') ? 'united_states'
+  let country = (countryName=='US') || (countryName=='USA') || (countryName=='United States of America') ? 'united_states'
                 :(countryName=='Democratic Republic of the Congo')?'democratic_republic_congo_brazzaville'
                 :(countryName=='United Republic of Tanzania')?'tanzania'
                 :countryName.toLowerCase().replace(/ /gi,'_');
@@ -147,7 +150,7 @@ legend.addTo(map);
 
 //Street base Map
 let streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a> and <a href="https://thevirustracker.com">the virus tracker</a>',
+attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a> and <a href="https://thevirustracker.com">the virus tracker</a> or <a href="https://covid19api.herokuapp.com">covid19api</a>',
 	maxZoom: 18
 });
 
@@ -158,10 +161,52 @@ streets.addTo(map);
 //Call API data
 
 //fetch covid data
-fetch(covidByCountry).then((response) => response.json()).then( (covidDataObject) => {
-  //remove the Korean.
-  //North Korean and South Korean are already in the set
-  covidData = Object.values(covidDataObject.countryitems[0]).filter(item => item.ourid != 84);
+fetch(covidByCountry).then((response) => {
+      
+      return response.json()
+            //use backup data from other places
+            .catch( (e) => 
+            fetch(covidByCountry1).then( (response1) =>
+            {
+              if (!response1.ok)
+              {
+                throw Error(response.statusText);
+              }
+              return response1.json();
+            }));
+
+}).then( (covidDataObject) => {
+
+  let obj = {
+      title:"",
+      total_cases:0,
+      total_recovered:0,
+      total_unresolved:0,
+      total_deaths:0,
+      total_new_cases_today:0,
+      total_new_deaths_today:0,
+      total_active_cases:0,
+      total_serious_cases:0
+  };
+  console.log(covidDataObject);
+
+  if (Object.keys(covidDataObject).includes("locations")){
+    covidData = covidDataObject.locations.map(item => {
+        newObj = Object.assign({},obj);
+        newObj.title = (item.country == "US") ? "USA" :
+                       (item.country.includes("Congo (Kinshasa)"))?"Democratic Republic of the Congo":
+                       (item.country.includes("Congo (Brazzaville)"))?"Republic of the Congo":
+                       item.country;
+        newObj.total_cases = item.latest;
+        return newObj;
+    });
+  }
+  else{
+    //remove the Korean.
+    //North Korean and South Korean are already in the set
+    covidData = Object.values(covidDataObject.countryitems[0])
+                      .filter(item => item.ourid != 84);
+  }
 
   //fetch the geojson map. For performace, we can use a static file.
   //fetch(geoCountry).then((response) => response.json()).then( (countryDataObject) => {
@@ -206,3 +251,4 @@ fetch(covidByCountry).then((response) => response.json()).then( (covidDataObject
   .openOn(map);
   
 });
+
